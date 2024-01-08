@@ -1,0 +1,41 @@
+﻿@model List<REPORT_MANAGEMENT_APP.Models.ManageUserRoleModel>
+@{
+    ViewBag.Title = "Danh sách quyền";
+}
+
+@using (Html.BeginForm("ManageRole", "Manage", new { userId = ViewBag.userId }, method: FormMethod.Post))
+{
+    <div class="box">
+        <div class="box-title">
+            <h3>
+                <i class="icon-calendar"></i>
+                @ViewBag.Title: @ViewBag.UserName
+            </h3>
+        </div>
+
+        <div class="box-content">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-check m-1">
+                    @Html.HiddenFor(m => @Model[i].RoleId)
+                    @Html.HiddenFor(m => @Model[i].RoleName)
+                    <label class="checkbox">
+                        @Html.CheckBoxFor(m => @Model[i].Selected, new { @type = "checkbox" })
+                        @Model[i].RoleName
+                    </label>
+                </div>
+            }
+        </div>
+
+        <div class="box-content">
+            <input type="submit" value="Cập nhật" class="btn btn-sm btn-success"
+                   style="width:auto" />
+            @Html.ActionLink("Quay lại", "ManageUser", new { area = "" }, new { @class = "btn btn-sm btn-primary" })
+        </div>
+    </div>
+}
+
+
+
+
+

@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="manifest" href="../manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("Styles", required: false)
+
+
+</head>
+<body>
+
+    @*<div id="spinner"></div>*@
+
+    <div id="cover-spin"></div>
+
+
+    @*<div class="smt-spinner-circle">
+            <div class="smt-spinner"></div>
+            <div class="smt-spinner-inner-circle"></div>
+        </div>*@
+
+    <div id="navigation">
+        <div class="container-fluid">
+            @Html.ActionLink("HOME", "Self", "Report", new { area = "" }, new { @class = "navbar-brand", @id = "brand" })
+            <a href="#" style="margin-left: -15px" class="toggle-nav" rel="tooltip" data-placement="bottom" title="Toggle navigation"><i class="icon-reorder"></i></a>
+            <ul class='main-nav'>
+                @if (Request.IsAuthenticated)
+                {
+                    <li class="nav-item @Html.ActiveClass("Report")">@Html.ActionLink("Tệp tin", "Self", "Report", new { area = "" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item @Html.ActiveClass("Synthetic")">@Html.ActionLink("Tổng hợp", "Index", "Synthetic", new { area = "" }, new { @class = "nav-link" })</li>
+                }
+
+                <li class="@Html.ActiveClass("Catalogue")">
+                    <a href="#" data-toggle="dropdown" class='dropdown-toggle'>
+                        <i class="icon-edit"></i>
+                        <span>Danh mục</span>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item @Html.ActiveClass("Catalogue/CatalogueBudget")">@Html.ActionLink("Mục lục ngân sách", "CatalogueBudget", "Catalogue", new { area = "" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item @Html.ActiveClass("Catalogue/CatalogueDepartment")">@Html.ActionLink("Danh mục B quản lý", "CatalogueDepartment", "Catalogue", new { area = "" }, new { @class = "nav-link" })</li>
+                    </ul>
+                </li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+            <a href="#" class='toggle-mobile'><i class="icon-reorder"></i></a>
+        </div>
+    </div>
+
+    <div class="container-fluid" id="content">
+        @if (Request.IsAuthenticated)
+        {
+            var info = Html.ViewContext.RouteData.Values;
+            string controller = info["controller"].ToString();
+            string action = info["action"].ToString();
+            if (controller == "Synthetic")
+            {
+                <div id="left">
+                    <form action="http://www.eakroko.de/flat/search-results.html" method="GET" class='search-form'>
+                        <div class="search-pane">
+                            <input type="text" name="search" placeholder="Tìm kiếm...">
+                            <button type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Thống kê tổng quan</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li>
+                                <a href="#">Thống kê tổng quan</a>
+                            </li>
+                            <li>
+                                <a href="#">Thống kê thao tác người dùng</a>
+                            </li>
+                            <li>
+                                <a href="#">Thống kê lỗi hệ thống</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Thống kê chi tiết</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li>
+                                <a href="#">Thống kê chi tiết</a>
+                            </li>
+                            <li>
+                                <a href="#">Thống kê chi tiết</a>
+                            </li>
+                            <li>
+                                <a href="#">Thống kê chi tiết</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+            else if (controller == "Catalogue" && (action.StartsWith("Catalogue")))
+            {
+                <div id="left">
+                    <form action="http://www.eakroko.de/flat/search-results.html" method="GET" class='search-form'>
+                        <div class="search-pane">
+                            <input type="text" name="search" placeholder="Tìm kiếm...">
+                            <button type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Danh mục khác</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li>
+                                <a href="#">Danh mục khác</a>
+                            </li>
+                            <li>
+                                <a href="#">Danh mục khác</a>
+                            </li>
+                            <li>
+                                <a href="#">Danh mục khác</a>
+                            </li>
+                            <li>
+                                <a href="#">Danh mục khác</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Thêm danh mục</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li>
+                                <a href="#">Thêm trực tiếp</a>
+                            </li>
+                            <li>
+                                <a href="#">Thêm qua tệp tin</a>
+                            </li>
+                            <li>
+                                <a href="#">Thêm tự động từ năm trước</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="left">
+                    <form action="http://www.eakroko.de/flat/search-results.html" method="GET" class='search-form'>
+                        <div class="search-pane">
+                            <input type="text" name="search" placeholder="Tìm kiếm...">
+                            <button type="submit"><i class="icon-search"></i></button>
+                        </div>
+                    </form>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Quản lý báo cáo</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li class="@Html.ActiveClass("Report/Upload")">
+                                @Html.ActionLink("Tải lên báo cáo", "Upload", "Report")
+                            </li>
+                            <li class="@Html.ActiveClass("Report/Self")">
+                                @Html.ActionLink("Báo cáo thuộc đơn vị", "Self", "Report")
+                            </li>
+                            <li class="@Html.ActiveClass("Report/Child")">
+                                @Html.ActionLink("Báo cáo của đơn vị cấp con", "Child", "Report")
+                            </li>
+                            <li class="@Html.ActiveClass("Report/WrongInfo")">
+                                @Html.ActionLink("Báo cáo sai ban quản lý", "WrongInfo", "Report")
+                            </li>
+                            <li class="@Html.ActiveClass("Report/Revoke")">
+                                @Html.ActionLink("Báo cáo đã thu hồi", "Revoke", "Report")
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Quản lý đơn vị</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li class="@Html.ActiveClass("Manage/Agency")">
+                                @Html.ActionLink("Cấu hình đơn vị người dùng", "Agency", "Manage")
+                            </li>
+                            <li class="@Html.ActiveClass("Manage/ApproveAgency")">
+                                @Html.ActionLink("Kiểm duyệt đơn vị cấp con", "ApproveAgency", "Manage")
+                            </li>
+                            <li class="@Html.ActiveClass("Manage/RejectAgency")">
+                                @Html.ActionLink("Đơn vị con bị từ chối kiểm duyệt", "RejectAgency", "Manage")
+                            </li>
+                        </ul>
+                    </div>
+                    @if (User.IsInRole(nameof(REPORT_MANAGEMENT_APP.Roles.Administrator)))
+                    {
+                        <div class="subnav">
+                            <div class="subnav-title">
+                                <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Quản trị</span></a>
+                            </div>
+                            <ul class="subnav-menu">
+                                <li class="@Html.ActiveClass("Manage/ManageUser")">
+                                    @Html.ActionLink("Danh sách người dùng", "ManageUser", "Manage")
+                                </li>
+                                <li class="@Html.ActiveClass("Report/All")">
+                                    @Html.ActionLink("Danh sách báo cáo", "All", "Report")
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    <div class="subnav">
+                        <div class="subnav-title">
+                            <a href="#" class='toggle-subnav'><i class="icon-angle-down"></i><span>Phản hồi</span></a>
+                        </div>
+                        <ul class="subnav-menu">
+                            <li>
+                                <a href="#">Gửi kiến nghị lên đơn vị cấp trên</a>
+                            </li>
+                            <li>
+                                <a href="#">Yêu cầu kiểm duyệt đơn vị</a>
+                            </li>
+                            <li>
+                                <a href="#">Yêu cầu thay đổi thông tin đơn vị</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            }
+        }
+        <div id="main">
+            <div class="container-fluid">
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="page-header">
+                        <div class="pull-left">
+                            <h1>@Html.ViewBag.Title</h1>
+                        </div>
+                        <div class="pull-right">
+                            <ul class="minitiles">
+                                <li class='teal'>
+                                    <a href="#"><i class="icon-inbox"></i></a>
+                                </li>
+                            </ul>
+                            <ul class="stats">
+                                <li class='blue'>
+                                    <i class="icon-file-alt"></i>
+                                    <div class="details">
+                                        <span class="big">... báo cáo</span>
+                                        <span class="small">Dung lượng ...</span>
+                                    </div>
+                                </li>
+                                <li class='green'>
+                                    <i class="icon-group"></i>
+                                    <div class="details">
+                                        <span class="big">01</span>
+                                        <span>Người đang dùng</span>
+                                    </div>
+                                </li>
+                                <li class='orange'>
+                                    <i class="icon-calendar"></i>
+                                    <div class="details">
+                                        <span class="big">...</span>
+                                        <span>...</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="breadcrumbs">
+                        <ul>
+                            @{
+                                var info = Html.ViewContext.RouteData.Values;
+                                string controller = info["controller"].ToString();
+                                string action = info["action"].ToString();
+                            }
+                            <li>
+                                @Html.ActionLink(controller, "Index", controller)
+                                <i class="icon-angle-right"></i>
+                            </li>
+                            <li>
+                                @Html.ActionLink(action, action, controller)
+                            </li>
+                        </ul>
+                        <div class="close-bread">
+                            <a href="#"><i class="icon-remove"></i></a>
+                        </div>
+                    </div>
+                }
+                <main style="min-height: 70vh">
+                    @RenderBody()
+                    @RenderSection("SPAViews", required: false)
+
+                </main>
+
+            </div>
+
+            <footer class="container-fluid" style="margin-top: auto">
+                <hr />
+                <p>&copy; @DateTime.Now.Year - Phần mềm quản lý báo cáo</p>
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        var table = $('#test');
+        $('#test tbody').on('dblclick', 'tr', function () {
+            var data = ["Exception"];
+            alert('You clicked on ' + data[0] + '\'s row');
+        });
+    </script>
+
+</body>
+</html>

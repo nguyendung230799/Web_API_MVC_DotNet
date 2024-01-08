@@ -1,0 +1,10 @@
+packages/
+Storage/bin/
+Storage/obj/
+REPORT_MANAGEMENT_APP/bin/
+REPORT_MANAGEMENT_APP/obj/
+REPORT_MANAGEMENT_CORE/bin/
+REPORT_MANAGEMENT_CORE/obj/
+.vs/
+
+

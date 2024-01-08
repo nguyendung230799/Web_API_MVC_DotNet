@@ -1,0 +1,269 @@
+﻿@model List<REPORT_MANAGEMENT_APP.Models.UserModel>
+@{
+    ViewBag.Controller = "Đơn vị cấp con bị từ chối kiểm duyệt";
+    ViewBag.Action = "Xem chi tiết";
+    ViewBag.Title = "Đơn vị cấp con bị từ chối kiểm duyệt";
+}
+
+<form id="modal-form">
+    <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel"></h3>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="modal-id" id="modal-id" />
+            <input type="text" id="modal-name" readonly />
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
+            <button class="btn btn-primary" type="submit">Xác nhận</button>
+        </div>
+    </div>
+</form>
+
+<div class="box box-color box-bordered">
+    <div class="box-title">
+        <h3>
+            <i class="icon-th-list"></i>
+            Danh sách đơn vị cấp con
+        </h3>
+    </div>
+    <div class="box-content nopadding">
+        <div class="box-content nopadding">
+            <div id="TableAproveAgency" class="dataTables_wrapper" role="grid">
+                <div id="DataTables_Table_0_length" class="dataTables_length">
+                    <label>
+                        <div class="input-mini">
+                            <select size="1" name="DataTables_Table_0_length"
+                                    aria-controls="DataTables_Table_0" id="sel2WK" class="chosen-select">
+                                <option value="10" selected="selected">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <span>bản ghi mỗi trang</span>
+                    </label>
+                </div>
+                <div class="dataTables_filter" id="DataTables_Table_0_filter">
+                    <label>
+                        <span>Tìm kiếm:</span>
+                        <input type="text" aria-controls="DataTables_Table_0" placeholder="Nhập từ khóa..." />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    <style>
+
+        .ajax_table_group_button {
+            max-width: fit-content;
+        }
+
+        .ajax_table_hometown {
+            width: 200px;
+        }
+
+        .ajax_table_checkbox {
+            width: 5px;
+        }
+
+        .ajax_table_email {
+            width: auto;
+        }
+
+        .ajax_table_action {
+            width: 100px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(function () {
+            showProgress();
+            $.ajax({
+                url: `/api/Me/GetChildrenUsers?page=1&rowsPerPage=${@ViewBag.RowsPerPage}&status=false`,
+                dataType: "json",
+                type: "get",
+                contentType: 'application/json; charset=utf-8',
+                data: null,
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (d) {
+                    $("#TableAproveAgency").append(d.Data)
+                    var tableInfo = createTableInfo(1, @ViewBag.RowsPerPage, d.Total);
+                    $("#DataTable").after(tableInfo)
+                    var tablePagination = createPagination(d.Pagination, 1)
+                    $("#DataTable").after(tablePagination)
+                    setPagination()
+                    hideProgress()
+                },
+                failure: function (response) {
+                  alert(response.responseText);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            })
+        })
+
+
+        function setPagination() {
+            $(".dataTables_paginate").on("click", "a", function (e) {
+                showProgress()
+                e.preventDefault();
+                var data = {
+                    page: $(this).text(),
+                    rowsPerPage: @ViewBag.RowsPerPage,
+                    status: false
+                };
+
+                $.getJSON("/api/Me/GetChildrenUsers", data, function (d) {
+                    $("#DataTable").html(d.Data);
+                    var tableInfo = createTableInfoInner(data.page, @ViewBag.RowsPerPage, d.Total);
+                    $("#DataTables_Table_0_info").html(tableInfo);
+                    var tablePagination = createPaginationInner(d.Pagination, data.page)
+                    $("#DataTables_Table_0_paginate").html(tablePagination)
+                    hideProgress();
+                })
+            })
+        }
+
+        function createPagination(d, e) {
+            var pagination = `<div class="dataTables_paginate paging_full_numbers" id="DataTables_Table_0_paginate">`;
+            pagination += `<a tabindex="0" class="first paginate_button paginate_button_disabled" id="DataTables_Table_0_first">Đầu</a>`
+            pagination += `<a tabindex="0" class="previous paginate_button paginate_button_disabled" id="DataTables_Table_0_previous">Trước</a>`
+            pagination += `<span>`
+            for (var i = 1; i < d + 1; i++) {
+                if (i === e) {
+                    pagination += `<a tabindex="0" class="paginate_active">${i}</a>`
+                } else {
+                    pagination += `<a tabindex="0" class="paginate_button">${i}</a>`
+                }
+            }
+            pagination += `</span>`;
+            pagination += `<a tabindex="0" class="next paginate_button" id="DataTables_Table_0_next">Sau</a>`
+            pagination += `<a tabindex="0" class="last paginate_button" id="DataTables_Table_0_last">Cuối</a>`
+            pagination += "</div>"
+            return pagination
+        }
+
+        function createPaginationInner(d, e) {
+            var pagination = `<a tabindex="0" class="first paginate_button paginate_button_disabled" id="DataTables_Table_0_first">Đầu</a>`
+            pagination += `<a tabindex="0" class="previous paginate_button paginate_button_disabled" id="DataTables_Table_0_previous">Trước</a>`
+            pagination += `<span>`
+            for (var i = 1; i < d + 1; i++) {
+                if (i == e) {
+                    pagination += `<a tabindex="0" class="paginate_active">${i}</a>`
+                } else {
+                    pagination += `<a tabindex="0" class="paginate_button">${i}</a>`
+                }
+            }
+            pagination += `</span>`;
+            pagination += `<a tabindex="0" class="next paginate_button" id="DataTables_Table_0_next">Sau</a>`
+            pagination += `<a tabindex="0" class="last paginate_button" id="DataTables_Table_0_last">Cuối</a>`
+            return pagination
+        }
+
+        function createTableInfo(row, rowsPerPage, total) {
+            var nextOffset = row * rowsPerPage
+            if (nextOffset > total) {
+                nextOffset = total
+            }
+            if (total == 0) {
+                var tableInfo = `<div class="dataTables_info" id="DataTables_Table_0_info">Không có bản ghi nào</div>`;
+            } else {
+                var tableInfo = `<div class="dataTables_info" id="DataTables_Table_0_info">Hiển thị <span>${(row - 1) * rowsPerPage + 1}</span> đến <span>${nextOffset}</span> của <span>${total}</span> bản ghi</div>`;
+            }
+            return tableInfo;
+        }
+
+        function createTableInfoInner(row, rowsPerPage, total) {
+            var nextOffset = row * rowsPerPage;
+            if (nextOffset > total) {
+                nextOffset = total
+            }
+            if (total == 0) {
+                var tableInfo = "Không có bản ghi nào";
+            } else {
+                var tableInfo = `Hiển thị <span>${(row - 1) * rowsPerPage + 1}</span> đến <span>${nextOffset}</span> của <span>${total}</span> bản ghi`;
+            }
+            return tableInfo;
+        }
+
+        function onDetail(id, hometown) {
+            $("#myModalLabel").text("Xem chi tiết")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onCancel(id, hometown) {
+            $("#myModalLabel").text("Từ chối")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onApprove(id, hometown) {
+            $("#myModalLabel").text("Kiểm duyệt")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onEdit(id) {
+            alert(id)
+        }
+
+        function onDelete(id) {
+            alert(id)
+        }
+
+        $('#modal-form').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/api/Me/AddClaim',
+                type: 'post',
+                data: $('#modal-form').serialize(),
+                success: function () {
+                    $("#modal").modal('toggle')
+                    $.gritter.add({
+                        title: 'Quản lý đơn vị!',
+                        text: 'Đã xóa thành công đơn vị',
+                        fade_out_speed: '1000',
+                        time: '1000',
+                    });
+                    location.reload();
+                }
+            });
+        });
+
+        $('#modal-form-origin').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/api/Me/GetChildrenUsers?page=6&rowsPerPage=10&status=fasle',
+                type: 'get',
+                data: $('#modal-form').serialize(),
+                success: function () {
+                    $("#modal").modal('toggle')
+                    $.gritter.add({
+                        title: 'Quản lý đơn vị!',
+                        text: 'Đã xóa thành công đơn vị',
+                        fade_out_speed: '1000',
+                        time: '1000',
+                    });
+                    location.reload();
+                }
+            });
+        });
+
+    </script>
+}

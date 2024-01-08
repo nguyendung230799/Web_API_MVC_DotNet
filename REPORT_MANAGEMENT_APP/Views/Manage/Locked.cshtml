@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Lock</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class='locked'>
+    <div class="wrapper">
+        <div class="pull-left">
+            <img src="/img/demo/locked.jpg" alt="" width="200" height="200">
+            <a href="more-login.html">Not John Doe?</a>
+        </div>
+        <div class="right">
+            <div class="upper">
+                <h2>John Doe</h2>
+                <span>Locked</span>
+            </div>
+            <form action="http://www.eakroko.de/flat/index.html" method='get'>
+                <input type="password" placeholder="Password">
+                <div>
+                    <input type="submit" value="Unlock" class='btn btn-inverse'>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,370 @@
+﻿@{
+    ViewBag.Controller = "Kiểm duyệt toàn bộ đơn vị";
+    ViewBag.Action = "Xem chi tiết";
+    ViewBag.Title = "Danh sách người dùng";
+}
+
+
+@*@{
+        var grid = new WebGrid(Model, canPage: true, rowsPerPage: 5);
+        grid.Pager(WebGridPagerModes.NextPrevious);
+        @grid.GetHtml(tableStyle: "webGrid table table-nomargin dataTable table-bordered",
+            htmlAttributes: new { id = "DataTable" },
+            headerStyle: "header",
+            alternatingRowStyle: "alt",
+            columns: grid.Columns(
+                grid.Column("Email"),
+                grid.Column("Hometown")
+                )
+        )
+    }*@
+
+<form id="modal-form">
+    <div id="modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Xóa đơn vị?</h3>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" name="modal-type" id="modal-type" />
+            <input type="hidden" name="modal-id" id="modal-id" />
+            <input type="text" id="modal-name" readonly />
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Hủy</button>
+            <button class="btn btn-primary" type="submit">Xác nhận</button>
+        </div>
+    </div>
+</form>
+
+<div class="box box-color box-bordered">
+    <div class="box-title">
+        <h3>
+            <i class="icon-table"></i>
+            Danh sách toàn bộ đơn vị
+        </h3>
+    </div>
+    <div class="box-content nopadding">
+        <div class="box-content nopadding">
+            <div id="TableAproveAgency" class="dataTables_wrapper" role="grid">
+                <div id="DataTables_Table_0_length" class="dataTables_length">
+                    <label>
+                        <div class="input-mini">
+                            <select size="1" name="DataTables_Table_0_length"
+                                    aria-controls="DataTables_Table_0" id="sel2WK" class="chosen-select">
+                                <option value="10" selected="selected">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <span>bản ghi mỗi trang</span>
+                    </label>
+                </div>
+                <div class="dataTables_filter" id="DataTables_Table_0_filter">
+                    <label>
+                        <span>Tìm kiếm:</span>
+                        <input type="text" aria-controls="DataTables_Table_0" placeholder="Nhập từ khóa..." />
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    <style>
+
+        .ajax_table_group_button {
+            max-width: fit-content;
+        }
+
+        .ajax_table_hometown {
+            width: 200px;
+        }
+
+        .ajax_table_checkbox {
+            width: 5px;
+        }
+
+        .ajax_table_email {
+            width: auto;
+        }
+
+        .ajax_table_action {
+            width: 245px;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(function () {
+            showProgress();
+            $.ajax({
+                url: `/api/Me/GetUserRoles?page=1&rowsPerPage=${@ViewBag.RowsPerPage}`,
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: null,
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (d) {
+                    $("#TableAproveAgency").append(d.Data)
+
+                    var chkHeader = $("<input type=checkbox id='chkHeader' />");
+                    chkHeader.click(function () {
+                        if ($(this).is(":checked")) {
+                            $("#DataTable td input[type=checkbox]").prop("checked", true);
+                        } else {
+                            $("#DataTable td input[type=checkbox]").prop("checked", false);
+                        }
+                    })
+
+                    $("#DataTable th:first-child").append(chkHeader);
+
+                    var tableInfo = createTableInfo(1, @ViewBag.RowsPerPage, d.Total);
+                    $("#DataTable").after(tableInfo)
+                    var tablePagination = createPagination(d.Pagination, 1)
+                    $("#DataTable").after(tablePagination)
+                    setPagination()
+                    hideProgress()
+                },
+                failure: function (response) {
+                  alert(response.responseText);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            })
+        })
+
+
+        function setPagination() {
+            $(".dataTables_paginate").on("click", "a", function (e) {
+                showProgress()
+                e.preventDefault();
+                var data = {
+                    page: $(this).text(),
+                    rowsPerPage: @ViewBag.RowsPerPage,
+                };
+
+                $.getJSON("/api/Me/GetUserRoles", data, function (d) {
+                    $("#DataTable").html(d.Data);
+
+                    var chkHeader = $("<input type=checkbox id='chkHeader' />");
+                    chkHeader.click(function () {
+                        if ($(this).is(":checked")) {
+                            $("#DataTable td input[type=checkbox]").prop("checked", true);
+                        } else {
+                            $("#DataTable td input[type=checkbox]").prop("checked", false);
+                        }
+                    })
+
+                    $("#DataTable th:first-child").append(chkHeader);
+
+                    var tableInfo = createTableInfoInner(data.page, @ViewBag.RowsPerPage, d.Total);
+                    $("#DataTables_Table_0_info").html(tableInfo);
+                    var tablePagination = createPaginationInner(d.Pagination, data.page)
+                    $("#DataTables_Table_0_paginate").html(tablePagination)
+                    hideProgress();
+                })
+            })
+        }
+
+        function createPagination(d, e) {
+            var pagination = `<div class="dataTables_paginate paging_full_numbers" id="DataTables_Table_0_paginate">`;
+            pagination += `<a tabindex="0" class="first paginate_button paginate_button_disabled" id="DataTables_Table_0_first">Đầu</a>`
+            pagination += `<a tabindex="0" class="previous paginate_button paginate_button_disabled" id="DataTables_Table_0_previous">Trước</a>`
+            pagination += `<span>`
+            for (var i = 1; i < d + 1; i++) {
+                if (i === e) {
+                    pagination += `<a tabindex="0" class="paginate_active">${i}</a>`
+                } else {
+                    pagination += `<a tabindex="0" class="paginate_button">${i}</a>`
+                }
+            }
+            pagination += `</span>`;
+            pagination += `<a tabindex="0" class="next paginate_button" id="DataTables_Table_0_next">Sau</a>`
+            pagination += `<a tabindex="0" class="last paginate_button" id="DataTables_Table_0_last">Cuối</a>`
+            pagination += "</div>"
+            return pagination
+        }
+
+        function createPaginationInner(d, e) {
+            var pagination = `<a tabindex="0" class="first paginate_button paginate_button_disabled" id="DataTables_Table_0_first">Đầu</a>`
+            pagination += `<a tabindex="0" class="previous paginate_button paginate_button_disabled" id="DataTables_Table_0_previous">Trước</a>`
+            pagination += `<span>`
+            for (var i = 1; i < d + 1; i++) {
+                if (i == e) {
+                    pagination += `<a tabindex="0" class="paginate_active">${i}</a>`
+                } else {
+                    pagination += `<a tabindex="0" class="paginate_button">${i}</a>`
+                }
+            }
+            pagination += `</span>`;
+            pagination += `<a tabindex="0" class="next paginate_button" id="DataTables_Table_0_next">Sau</a>`
+            pagination += `<a tabindex="0" class="last paginate_button" id="DataTables_Table_0_last">Cuối</a>`
+            return pagination
+        }
+
+        function createTableInfo(row, rowsPerPage, total) {
+            var nextOffset = row * rowsPerPage
+            if (nextOffset > total) {
+                nextOffset = total
+            }
+            if (total == 0) {
+                var tableInfo = `<div class="dataTables_info" id="DataTables_Table_0_info">Không có bản ghi nào</div>`;
+            } else {
+                var tableInfo = `<div class="dataTables_info" id="DataTables_Table_0_info">Hiển thị <span>${(row - 1) * rowsPerPage + 1}</span> đến <span>${nextOffset}</span> của <span>${total}</span> bản ghi</div>`;
+            }
+            return tableInfo;
+        }
+
+        function createTableInfoInner(row, rowsPerPage, total) {
+            var nextOffset = row * rowsPerPage;
+            if (nextOffset > total) {
+                nextOffset = total
+            }
+            if (total == 0) {
+                var tableInfo = "Không có bản ghi nào";
+            } else {
+                var tableInfo = `Hiển thị <span>${(row - 1) * rowsPerPage + 1}</span> đến <span>${nextOffset}</span> của <span>${total}</span> bản ghi`;
+            }
+            return tableInfo;
+        }
+
+        function onDetail(id, hometown) {
+            $("#myModalLabel").text("Xem chi tiết")
+            $("#modal-type").val("detail")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onCancel(id, hometown) {
+            $("#myModalLabel").text("Từ chối")
+            $("#modal-type").val("cancel")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+
+        }
+
+        function onApprove(id, hometown) {
+            $("#myModalLabel").text("Kiểm duyệt")
+            $("#modal-type").val("approve")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onResetPassword(id, hometown) {
+            $("#myModalLabel").text("Đặt lại mật khẩu")
+            $("#modal-type").val("reset-password")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onEdit(id, hometown) {
+            $("#myModalLabel").text("Sửa đổi")
+            $("#modal-type").val("edit")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onRevoke(id, hometown) {
+            $("#myModalLabel").text("Thu hồi")
+            $("#modal-type").val("revoke")
+            $("#modal-id").val(id)
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        function onDelete(id, hometown) {
+            $("#myModalLabel").text("Xóa dữ liệu")
+            $("#modal-id").val(id)
+            $("#modal-type").val("delete")
+            $("#modal-name").val(hometown)
+            $("#modal").modal('toggle')
+        }
+
+        $('#modal-form').submit(function (e) {
+            e.preventDefault();
+            const modalType = $('#modal-type').val()
+            switch (modalType) {
+                case 'reset-password':
+                    $.ajax({
+                        url: '/Manage/ResetPassword',
+                        type: 'post',
+                        data: $('#modal-form').serialize(),
+                        success: function () {
+                            $("#modal").modal('toggle')
+                            $.gritter.add({
+                                title: 'Đổi mật khẩu',
+                                text: 'Thay đổi thành công mật khẩu',
+                                fade_out_speed: '1000',
+                                time: '1000',
+                            });
+                        },
+                        failure: function (response) {
+                            $("#modal").modal('toggle')
+                            $.gritter.add({
+                                title: 'Đổi mật khẩu',
+                                text: 'Thất bại',
+                                fade_out_speed: '1000',
+                                time: '1000',
+                            });
+                        },
+                    });
+                    break;
+                case 'approve':
+                case 'revoke':
+                case 'cancel':
+                    $.ajax({
+                        url: '/api/Me/AddClaim',
+                        type: 'post',
+                        data: $('#modal-form').serialize(),
+                        success: function () {
+                            $("#modal").modal('toggle')
+                            $.gritter.add({
+                                title: 'Quản lý người dùng!',
+                                text: 'Thay đổi thành công quyền hạn',
+                                fade_out_speed: '1000',
+                                time: '1000',
+                            });
+                            location.reload();
+                        }
+                    });
+                default:
+            } 
+                
+            
+        });
+
+        $('#modal-form-origin').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/api/Me/GetUserRoles?page=6&rowsPerPage=10',
+                type: 'get',
+                data: $('#modal-form').serialize(),
+                success: function () {
+                    $("#modal").modal('toggle')
+                    $.gritter.add({
+                        title: 'Quản lý đơn vị!',
+                        text: 'Đã xóa thành công đơn vị',
+                        fade_out_speed: '1000',
+                        time: '1000',
+                    });
+
+                    // Whatever you want to do after the form is successfully submitted
+                }
+            });
+        });
+
+    </script>
+}

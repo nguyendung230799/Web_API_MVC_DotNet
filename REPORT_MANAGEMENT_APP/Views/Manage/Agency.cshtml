@@ -1,0 +1,429 @@
+﻿@model REPORT_MANAGEMENT_APP.Models.IndexViewModel
+@{
+    ViewBag.Title = "Đơn vị người dùng";
+}
+
+@*<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>*@
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="box box-color box-bordered">
+            <div class="box-title">
+                <h3>
+                    <i class="icon-magic"></i>
+                    Quá trình kiểm duyệt đơn vị
+                </h3>
+            </div>
+            <div class="box-content">
+                @*<form action="/api/Me/CheckClaim" target="dummyframe" method="POST" class='form-horizontal form-wizard' id="ss">*@
+                <form class='form-horizontal form-wizard' id="ss">
+                    @Html.AntiForgeryToken()
+
+                    <div class="step" id="firstStep">
+                        <ul class="wizard-steps steps-3">
+                            <li class='active'>
+                                <div class="single-step">
+                                    <span class="title">I</span>
+                                    <span class="circle">
+                                        <span class="active"></span>
+                                    </span>
+                                    <span class="description">
+                                        Thông tin đơn vị hợp lệ
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">II</span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Đơn vị cha kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">III</span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Quản trị viên kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="control-group">
+                            <label for="firstname" class="control-label">Tên đơn vị</label>
+                            <div class="controls">
+                                @Html.TextBoxFor(m => m.AgencyName, new { @class = "input-xlarge", @data_rule_required = "true", @data_msg_required = "Chưa nhập tên đơn vị" })
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="anotherelem" class="control-label">Mã đơn vị</label>
+                            <div class="controls">
+                                @Html.TextBoxFor(m => m.AgencyCode, new { @class = "input-xlarge", @data_rule_required = "true", @data_msg_required = "Chưa nhập mã đơn vị" })
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="textfield" class="control-label">Ban quản lý</label>
+                            <div class="controls">
+                                <div class="input-xlarge">
+                                    @Html.ListBoxFor(m => m.ListDepartmentSelected, Model.ListDepartment, new { @style = "width: 284px", @id = "department" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step" id="secondStep">
+                        <ul class="wizard-steps steps-3">
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">I</span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Thông tin đơn vị hợp lệ
+                                    </span>
+                                </div>
+                            </li>
+                            <li class='active'>
+                                <div class="single-step">
+                                    <span class="title">
+                                        II
+                                    </span>
+                                    <span class="circle">
+                                        <span class="active"></span>
+                                    </span>
+                                    <span class="description">
+                                        Đơn vị cha kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        III
+                                    </span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Quản trị viên kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="control-group">
+                            <label for="text" class="control-label">Cấp quyền</label>
+                            <div class="controls input-xlarge">
+                                <select name="role" id="role">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="text" class="control-label">Đơn vị cha</label>
+                            <div class="controls input-xlarge">
+                                <select name="parent" id="parent">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="text" class="control-label">Yêu cầu kiểm duyệt</label>
+                            <div class="controls">
+                                <label class="checkbox"><input type="checkbox" name="policy" value="agree" data-rule-required="true" data-msg-required="Chưa xác nhận kiểm duyệt"> Tôi đồng ý.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step" id="thirdStep">
+                        <ul class="wizard-steps steps-3">
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        I
+                                    </span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Thông tin đơn vị hợp lệ
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        II
+                                    </span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Đơn vị cha kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                            <li class='active'>
+                                <div class="single-step">
+                                    <span class="title">
+                                        III
+                                    </span>
+                                    <span class="circle">
+                                        <span class="active"></span>
+                                    </span>
+                                    <span class="description">
+                                        Quản trị viên kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="control-group">
+                            <label for="text" class="control-label">Thông tin thêm</label>
+                            <div class="controls">
+                                <textarea name="textare" id="tt333" class="span12" rows="7" placeholder="Đang chờ đơn vị cha kiểm duyệt..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step" id="fourthstep">
+                        <ul class="wizard-steps steps-3">
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        I
+                                    </span>
+                                    <span class="circle">
+
+                                    </span>
+                                    <span class="description">
+                                        Thông tin đơn vị hợp lệ
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        II
+                                    </span>
+                                    <span class="circle">
+
+                                    </span>
+                                    <span class="description">
+                                        Đơn vị cha kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="single-step">
+                                    <span class="title">
+                                        III
+                                    </span>
+                                    <span class="circle">
+                                    </span>
+                                    <span class="description">
+                                        Quản trị viên kiểm duyệt
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="control-group">
+                            <div class="controls">
+                                <label class="checkbox"><input type="checkbox" name="verification" checked value="agree" data-rule-required="true"> Đơn vị đã được kiểm duyệt</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <input type="reset" class="btn" value="Quay lại" id="back">
+                        <input type="submit" class="btn btn-primary" value="Tiếp" id="next">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Styles {
+    <style>
+
+        #a_chzn {
+            max-width: 284px;
+        }
+
+        #department_chzn {
+            max-width: 284px;
+            width: 284px;
+        }
+
+        #role_chzn {
+            max-width: 284px;
+            width: 284px;
+        }
+    </style>
+}
+
+
+
+@section Scripts {
+
+    <script>
+
+        $("#next").on("click", function () {
+            $("#ss").submit();
+        })
+
+        $("#back").on("click", function () {
+            $("#next").show();
+        })
+
+        $("#ss").on("submit", function (e) {
+            var dataString = $(this).serialize();
+            var state = $("#ss").formwizard("state");
+            //if (state.currentStep == "secondStep") {
+            //    $("#next").hide()
+            //}
+            $.ajax({
+                type: "POST",
+                url: "/api/Me/RequestApproval",
+                data: dataString,
+                success: function (d) {
+                    if (d == "1") {
+                        //location.reload();
+                        $("#next").hide()
+                    } else {
+                        $.ajax({
+                            url: `/api/Me/GetRole`,
+                            dataType: "json",
+                            type: "GET",
+                            contentType: 'application/json; charset=utf-8',
+                            data: null,
+                            async: true,
+                            processData: false,
+                            cache: false,
+                            success: function (d) {
+                                $("#role").empty()
+                                d.forEach(item =>
+                                    $("#role").append(`<option value="${item}">${item}</option>`)
+                                )
+                                $("#role").chosen({
+                                    allow_single_deselect: true,
+                                    no_results_text: "Không tìm thấy kết quả",
+                                    placeholder_text_multiple: "Chọn quyền",
+                                    search_contains: true,
+                                });
+                                //$("#department_chzn").css({"width": "284px"});
+                                $("#role").trigger("liszt:updated");
+
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            },
+                            error: function (xhr) {
+                                alert('error');
+                            }
+                        });
+                        $.ajax({
+                            url: `/api/Me/GetAgency`,
+                            dataType: "json",
+                            type: "GET",
+                            contentType: 'application/json; charset=utf-8',
+                            data: null,
+                            async: true,
+                            processData: false,
+                            cache: false,
+                            success: function (d) {
+                                $("#parent").empty()
+                                d.forEach(item =>
+                                    $("#parent").append(`<option value="${item.Id}">${item.Name}</option>`)
+                                )
+                                $("#parent").chosen({
+                                    allow_single_deselect: true,
+                                    no_results_text: "Không tìm thấy kết quả",
+                                    placeholder_text_multiple: "Chọn quyền",
+                                    search_contains: true,
+                                });
+                                $("#parent").trigger("liszt:updated");
+
+                            },
+                            failure: function (response) {
+                                alert(response.responseText);
+                            },
+                            error: function (xhr) {
+                                alert('error');
+                            }
+                        });
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+
+        window.onload = function () {
+
+            $("#department").chosen({
+                allow_single_deselect: true,
+                no_results_text: "Không tìm thấy kết quả",
+                placeholder_text_multiple: "Chọn mã B quản lý",
+                search_contains: true,
+            });
+            $("#department").trigger("liszt:updated");
+
+            //$.ajax({
+            //    url: `/api/Me/GetDepartment`,
+            //    dataType: "json",
+            //    type: "GET",
+            //    contentType: 'application/json; charset=utf-8',
+            //    data: null,
+            //    async: true,
+            //    processData: false,
+            //    cache: false,
+            //    success: function (d) {
+            //        d.forEach(item =>
+            //            $("#department").append(`<option value="${item['Mã B quản lý']}">${item["Tên B quản lý"]}</option>`)
+            //        )
+            //        $("#department").chosen({
+            //            allow_single_deselect: true,
+            //            no_results_text: "Không tìm thấy kết quả",
+            //            placeholder_text_multiple: "Chọn mã B quản lý",
+            //            search_contains: true,
+            //        });
+            //        //$("#department_chzn").css({"width": "284px"});
+            //        $("#department").trigger("liszt:updated");
+
+            //    },
+            //    failure: function (response) {
+            //        alert(response.responseText);
+            //    },
+            //    error: function (xhr) {
+            //        alert('error');
+            //    }
+            //})
+
+            $.ajax({
+                url: `/api/Me/CheckClaim`,
+                dataType: "json",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: null,
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (d) {
+                    if (d == 1) {
+                        $("#next").click();
+                    } else if (d == 2) {
+                        $("#ss").formwizard("show", "thirdStep")
+                        $("#next").hide()
+                    } else if (d == 3) {
+                        $("#ss").formwizard("show", "fourthstep")
+                        $("#back").hide()
+                        $("#next").hide()
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (xhr) {
+                    alert('error', xhr.responseText);
+                }
+            })
+        }
+
+    </script>
+}

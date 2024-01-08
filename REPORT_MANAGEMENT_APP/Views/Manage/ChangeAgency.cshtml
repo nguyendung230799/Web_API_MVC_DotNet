@@ -1,0 +1,64 @@
+﻿@model REPORT_MANAGEMENT_APP.Models.ChangeAgencyViewModel
+@{
+    ViewBag.Title = "Thay đổi thông tin đơn vị";
+}
+
+
+@using (Html.BeginForm("ChangeAgency", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.Label("Tên đơn vị", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.AgencyName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Mã đơn vị", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @if (User.IsInRole(nameof(REPORT_MANAGEMENT_APP.Roles.Moderator)))
+            {
+                @Html.TextBoxFor(m => m.AgencyCode, new { @class = "form-control", @readonly = "readonly" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.AgencyCode, new { @class = "form-control" })
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("B quản lý", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.ListBoxFor(m => m.ListDepartmentSelected, Model.ListDepartment, new { @class = "form-control chosen-select" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Cấp đơn vị", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.AgencyLevel, new { @class = "form-control", @disabled = "" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Đơn vị cấp trên", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @if (User.IsInRole(nameof(Roles.Moderator)))
+            {
+                @Html.DropDownListFor(m => m.AgencyParent, Model.AgencyListParent, new { @class = "form-control", @disabled = "" })
+            }
+            else
+            {
+                @Html.DropDownListFor(m => m.AgencyParent, Model.AgencyListParent, new { @class = "form-control" })
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Cập nhật" class="btn btn-success" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

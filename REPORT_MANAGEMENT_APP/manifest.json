@@ -1,0 +1,69 @@
+{
+  "short_name": "Weather",
+  "name": "Weather: Do I need an umbrella?",
+  //"icons": [
+  //  {
+  //    "src": "/img/logo_unique.png",
+  //    "type": "image/svg+xml",
+  //    "sizes": "512x512"
+  //  },
+  //  {
+  //    "src": "/img/logo_unique.png",
+  //    "type": "image/png",
+  //    "sizes": "192x192"
+  //  },
+  //  {
+  //    "src": "/img/logo_unique.png",
+  //    "type": "image/png",
+  //    "sizes": "512x512"
+  //  }
+  //],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/",
+  "gcm_sender_id": "71562645621",
+  "theme_color": "#3367D6",
+  //"shortcuts": [
+  //  {
+  //    "name": "How's weather today?",
+  //    "short_name": "Today",
+  //    "description": "View weather information for today",
+  //    "url": "/today?source=pwa",
+  //    "icons": [
+  //      {
+  //        "src": "/img/logo_unique.png",
+  //        "sizes": "192x192"
+  //      }
+  //    ]
+  //  },
+  //  {
+  //    "name": "How's weather tomorrow?",
+  //    "short_name": "Tomorrow",
+  //    "description": "View weather information for tomorrow",
+  //    "url": "/tomorrow?source=pwa",
+  //    "icons": [
+  //      {
+  //        "src": "/img/logo_unique.png",
+  //        "sizes": "192x192"
+  //      }
+  //    ]
+  //  }
+  //],
+  "description": "Weather forecast information"
+  //"screenshots": [
+  //  {
+  //    "src": "/img/logo_unique.png",
+  //    "type": "image/png",
+  //    "sizes": "540x720",
+  //    "form_factor": "narrow"
+  //  },
+  //  {
+  //    "src": "/img/logo_unique.png",
+  //    "type": "image/png",
+  //    "sizes": "720x540",
+  //    "form_factor": "wide"
+  //  }
+  //]
+}

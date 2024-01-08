@@ -1,0 +1,56 @@
+﻿@model REPORT_MANAGEMENT_APP.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Đăng ký";
+}
+
+
+<div class="row-fluid" style="margin-top: 200px">
+    <div class="span4 offset1">
+        <img src="~/img/login-background.png" class="img-fluid" alt="" style="width: 80%">
+    </div>
+    <div class="span3" style="margin-top: 20px">
+        <section id="loginForm">
+            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <h2>ĐĂNG KÝ</h2>
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                <div class="email">
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "input-block-level", @placeholder = "Tài khoản" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="hometown">
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Hometown, new { @class = "input-block-level", @placeholder = "Đơn vị" })
+                        @Html.ValidationMessageFor(m => m.Hometown, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="pw">
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", @placeholder = "Mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="pw">
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "input-block-level", @placeholder = "Xác nhận mật khẩu" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="submit">
+                    <input type="submit" value="Đăng ký" class="btn btn-primary" />
+                </div>
+            }
+
+        </section>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

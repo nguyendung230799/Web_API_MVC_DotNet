@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNet.Identity
+
+@using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm" }))
+{
+    <div class="user">
+        <ul class="icon-nav">
+            <li>
+                <a href="/Manage/Locked" class='lock-screen' rel='tooltip' title="Lock screen" data-placement="bottom">
+                    <i class="icon-lock"></i>
+                </a>
+            </li>
+            <li>
+                <a href="/Manage/Locked" class='lock-screen' rel='tooltip' title="Lock screen" data-placement="bottom">
+                    <i class="icon-bell"></i>
+                </a>
+            </li>
+        </ul>
+        @if (Request.IsAuthenticated)
+        {
+            @Html.AntiForgeryToken()
+            <div class="dropdown">
+                <a title="Manage" class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer">
+                    Xin chào @User.Identity.GetUserName() <img src="/img/demo/user-avatar.jpg" alt="">
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="@Url.Action("Index", "Manage", routeValues: new { area = "" })">Thiết lập tài khoản</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Statistic", routeValues: new { area = "" })">Thống kê người dùng hiện tại</a>
+                    </li>
+                    <li>
+                        <a href="javascript:sessionStorage.removeItem('accessToken');$('#logoutForm').submit();">Đăng xuất</a>
+                    </li>
+
+                </ul>
+            </div>
+        }
+        else
+        {
+            <div class="dropdown">
+                <ul class="dropdown-menu pull-right">
+                    <li>@Html.ActionLink("Đăng ký", "Register", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "registerLink", @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Đăng nhập", "Login", "Account", routeValues: new { area = "" }, htmlAttributes: new { id = "loginLink", @class = "nav-link" })</li>
+                </ul>
+            </div>
+        }
+
+    </div>
+}

@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "Danh mục ban quản lý";
+}
+
+
+<div class="box box-color box-bordered" style="margin-top: 30px">
+    <div class="box-title">
+        <h3>
+            <i class="icon-table"></i>
+            Danh mục ban quản lý
+        </h3>
+    </div>
+    <div class="box-content nopadding">
+        <div class="box-content nopadding">
+            <div id="catalogue-department"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        $(function () {
+            showProgress();
+            $.ajax({
+                url: `/api/Me/GetDepartment`,
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: null,
+                async: true,
+                processData: false,
+                cache: false,
+                success: function (d) {
+                    if (Array.isArray(d) && d.length) {
+                        const container = document.querySelector('#catalogue-department');
+                        const hot = new Handsontable(container, {
+                            data: d,
+                            startRows: 5,
+                            startCols: 5,
+                            height: '650',
+                            width: 'auto',
+                            colHeaders: Object.keys(d[0]),
+                            minSpareRows: 1,
+                            stretchH: 'all',
+                            licenseKey: 'non-commercial-and-evaluation'
+                        });
+                    }
+                    hideProgress()
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            })
+        })
+    </script>
+}
+
+

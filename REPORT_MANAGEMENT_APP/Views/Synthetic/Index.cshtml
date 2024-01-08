@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "Tổng hợp số liệu";
+}
+
+<div class="row-fluid">
+    <div class="span6">
+        <div class="box">
+            <div class="box-title">
+                <h3>
+                    <i class="icon-font"></i>
+                    Cây đơn vị
+                </h3>
+            </div>
+            <div class="box-content">
+                <address>
+                    <div class="container"></div>
+                </address>
+
+                <address>
+                    <strong>Thông tin đơn vị liên hệ</strong>
+                    <br>
+                    <a href="mailto:#">ctc@bqp.gov.vn</a>
+                </address>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="box">
+            <div class="box-title">
+                <h3>
+                    <i class="icon-bold"></i>
+                    Chi tiết thông tin đơn vị
+                </h3>
+            </div>
+            <div class="box-content">
+                <p>
+                    <pre>Bộ Quốc phòng nước Cộng hòa xã hội chủ nghĩa Việt Nam, thường được gọi ngắn gọn hơn là Bộ Quốc phòng Việt Nam hay đơn giản là Bộ Quốc phòng <code>(BQP)</code>, là cơ quan trực thuộc Chính phủ Việt Nam, tham mưu cho Nhà nước Việt Nam về đường lối, nhiệm vụ quân sự, quốc phòng bảo vệ Tổ quốc; quản lý nhà nước về lĩnh vực quốc phòng trong phạm vi cả nước; tổ chức thực hiện việc xây dựng, quản lý và chỉ huy Quân đội nhân dân Việt Nam, Dân quân tự vệ; quản lý các dịch vụ công theo quy định của pháp luật. Bộ trưởng Bộ Quốc phòng Việt Nam vừa là người chỉ đạo thực hiện các chức năng quản lý nhà nước về quân sự, quốc phòng theo quy định của pháp luật, vừa chịu trách nhiệm tổ chức, xây dựng, quản lý và là người chỉ huy cao nhất trong Quân đội nhân dân Việt Nam và Dân quân tự vệ.</pre>
+                </p>
+                <p>
+                    Ngân sách quốc phòng
+                </p>
+                <p>
+                    <pre><abbr title="HyperText Markup Language" class="initialism">Bộ Quốc phòng Việt Nam</abbr> không công bố con số chính xác về ngân sách quốc phòng. Bất cứ một quốc gia nào có chủ quyền cũng đều quan tâm xây dựng chiến lược quốc phòng. Việc phân bổ nguồn lực của đất nước cho lĩnh vực này là một tất yếu khách quan và tỷ lệ phân bổ giữa "súng và bơ" luôn là vấn đề được cân nhắc, tính toán kỹ lưỡng.</pre>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        let data = [{
+            "id": "1",
+            "text":
+                "Văn phòng BQP",
+            "children": [{
+                "id": "1-1",
+                "text": "Văn phòng BQP 1",
+                "children": [{
+                    "id": "1-1-1",
+                    "text": "Văn phòng BQP 11"
+                }, {
+                    "id": "1-1-2",
+                    "text": "Văn phòng BQP 21"
+                },
+                {
+                    "id": "1-1-3",
+                    "text": "Văn phòng BQP 31"
+                }, {
+                    "id": "1-1-4",
+                    "text": "Văn phòng BQP 41"
+                },
+                ]
+            }]
+        },
+        {
+            "id": "2",
+            "text": "Cục Kinh tế BQP",
+        },
+        {
+            "id": "3",
+            "text": "Cục Cơ yếu BTTM",
+        },
+        {
+            "id": "4",
+            "text": "Ban Cơ yếu CP",
+        },
+        {
+            "id": "5",
+            "text": "Bộ Tư lệnh 86",
+        }
+        ]
+
+        let tree = new Tree('.container', {
+            // root data
+            data: [{ id: '0', text: 'Bộ Tổng Tham mưu', children: data }],
+            loaded: function () {
+                // pre-selected nodes
+                this.values = ['1-1-1', '1-1-2'];
+                // output selected nodes and values
+                console.log(this.selectedNodes)
+                console.log(this.values)
+                // disabled nodes
+                this.disables = ['1-1-1', '1-1-1']
+            }
+
+        })
+
+
+    </script>
+}

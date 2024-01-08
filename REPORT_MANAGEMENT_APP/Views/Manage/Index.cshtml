@@ -1,0 +1,113 @@
+﻿@model REPORT_MANAGEMENT_APP.Models.IndexViewModel
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+}
+
+<p class="text-success" style="margin-top: 20px;">@ViewBag.StatusMessage</p>
+@*<h2 class="text-danger">@ViewBag.StatusAgency</h2>*@
+
+<div class="row-fluid">
+    <div class="span12">
+        <div class="box box-color box-bordered">
+            <div class="box-title">
+                <h3>
+                    <i class="icon-user"></i>
+                    Thông tin người dùng
+                </h3>
+            </div>
+            <div class="box-content nopadding">
+                <form action="#" class="form-horizontal form-bordered">
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Tên đăng nhập</label>
+                        <div class="controls">
+                            <span class="uneditable-input">@Model.UserName</span>
+                            <span class="help-block">* Không thể đổi tên đăng nhập</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Ảnh đại diện</label>
+                        <div class="controls">
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="fileupload-new thumbnail" style="width: 80px; height: 80px;"><img src="http://www.placehold.it/80/EFEFEF/AAAAAA&amp;text=no+image" /></div>
+                                <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                                <div>
+                                    <span class="btn btn-file"><span class="fileupload-new">Chọn ảnh đại diện</span><span class="fileupload-exists">Thay đổi</span><input type="file" /></span>
+                                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Xóa ảnh</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Mật khẩu</label>
+                        <div class="controls">
+                            <span class="uneditable-input">*********</span>
+                            @if (Model.HasPassword)
+                            {
+                                <a href="@Url.Action("ChangePassword", "Manage")" class="btn">Thay đổi mật khẩu</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("SetPassword", "Manage")" class="btn">Tạo mới mật khẩu</a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Đơn vị</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input class="input-medium" id="appendedDropdownButton" type="text" value="@Model.AgencyName">
+                                <div class="btn-group">
+                                    @if (!string.IsNullOrEmpty(@Model.AgencyCode))
+                                    {
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                            Mã: @Model.AgencyCode &nbsp;
+                                            <span class="caret"></span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                            Chưa cấu hình mã đơn vị
+                                            <span class="caret"></span>
+                                        </button>
+                                    }
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="/Manage/Agency">Cấu hình đơn vị</a>
+                                        </li>
+                                        <li>
+                                            <a href="/Manage/ApproveAgency">Đi đến danh sách đơn vị cấp con</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Đơn vị cha</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input class="input-medium" id="appendedDropdownButton" type="text" value="@Model.AgencyParentName">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="textfield" class="control-label">Ghi chú thêm</label>
+                        <div class="controls">
+                            <div class="span12"><input type="text" name="textfield" id="textfield" class="tagsinput" value="Quản trị viên, Điều hành, Bộ Quốc phòng"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                        <button type="button" class="btn">Hủy bỏ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
